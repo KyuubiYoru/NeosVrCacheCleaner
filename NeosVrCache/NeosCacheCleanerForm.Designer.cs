@@ -30,7 +30,7 @@
         private void InitializeComponent()
         {
             this.button_cleanup = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox_cachePath = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.checkBox_showCacheAcces = new System.Windows.Forms.CheckBox();
             this.label7 = new System.Windows.Forms.Label();
@@ -44,19 +44,16 @@
             this.label_fileAccess = new System.Windows.Forms.Label();
             this.label_currentFileCount = new System.Windows.Forms.Label();
             this.label_currentSize = new System.Windows.Forms.Label();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.label_deletedFcount = new System.Windows.Forms.Label();
-            this.label_deletedSize = new System.Windows.Forms.Label();
             this.textbox_console = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // button_cleanup
             // 
             this.button_cleanup.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_cleanup.Location = new System.Drawing.Point(598, 74);
+            this.button_cleanup.Location = new System.Drawing.Point(301, 74);
             this.button_cleanup.Name = "button_cleanup";
             this.button_cleanup.Size = new System.Drawing.Size(100, 25);
             this.button_cleanup.TabIndex = 0;
@@ -64,18 +61,20 @@
             this.button_cleanup.UseVisualStyleBackColor = true;
             this.button_cleanup.Click += new System.EventHandler(this.buttonCleanUp_Click);
             // 
-            // textBox1
+            // textBox_cachePath
             // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(163, 15);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(535, 20);
-            this.textBox1.TabIndex = 3;
-            this.textBox1.Text = "E:\\NeosVR\\Cache";
+            this.textBox_cachePath.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox_cachePath.Location = new System.Drawing.Point(163, 15);
+            this.textBox_cachePath.Name = "textBox_cachePath";
+            this.textBox_cachePath.Size = new System.Drawing.Size(201, 20);
+            this.textBox_cachePath.TabIndex = 3;
+            this.textBox_cachePath.Text = "E:\\NeosVR\\Cache";
+            this.textBox_cachePath.Leave += new System.EventHandler(this.textBox_Leave);
             // 
             // groupBox1
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Controls.Add(this.checkBox_showCacheAcces);
             this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.label6);
@@ -85,10 +84,10 @@
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.textBox_cacheLimit);
             this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.textBox1);
+            this.groupBox1.Controls.Add(this.textBox_cachePath);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(714, 105);
+            this.groupBox1.Size = new System.Drawing.Size(407, 105);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Settings";
@@ -96,9 +95,9 @@
             // checkBox_showCacheAcces
             // 
             this.checkBox_showCacheAcces.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.checkBox_showCacheAcces.Location = new System.Drawing.Point(565, 39);
+            this.checkBox_showCacheAcces.Location = new System.Drawing.Point(276, 39);
             this.checkBox_showCacheAcces.Name = "checkBox_showCacheAcces";
-            this.checkBox_showCacheAcces.Size = new System.Drawing.Size(143, 24);
+            this.checkBox_showCacheAcces.Size = new System.Drawing.Size(125, 24);
             this.checkBox_showCacheAcces.TabIndex = 8;
             this.checkBox_showCacheAcces.Text = "Show Cache Access";
             this.checkBox_showCacheAcces.UseVisualStyleBackColor = true;
@@ -137,6 +136,7 @@
             this.textBox_timeLimit.Size = new System.Drawing.Size(41, 20);
             this.textBox_timeLimit.TabIndex = 7;
             this.textBox_timeLimit.Text = "16";
+            this.textBox_timeLimit.Leave += new System.EventHandler(this.textBox_Leave);
             // 
             // label4
             // 
@@ -153,7 +153,8 @@
             this.textBox_cacheLimit.Name = "textBox_cacheLimit";
             this.textBox_cacheLimit.Size = new System.Drawing.Size(41, 20);
             this.textBox_cacheLimit.TabIndex = 5;
-            this.textBox_cacheLimit.Text = "20";
+            this.textBox_cacheLimit.Text = "16";
+            this.textBox_cacheLimit.Leave += new System.EventHandler(this.textBox_Leave);
             // 
             // label3
             // 
@@ -166,12 +167,13 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.label_fileAccess);
             this.groupBox2.Controls.Add(this.label_currentFileCount);
             this.groupBox2.Controls.Add(this.label_currentSize);
             this.groupBox2.Location = new System.Drawing.Point(12, 123);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(157, 94);
+            this.groupBox2.Size = new System.Drawing.Size(407, 94);
             this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Current Size";
@@ -181,58 +183,28 @@
             this.label_fileAccess.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.label_fileAccess.Location = new System.Drawing.Point(6, 62);
             this.label_fileAccess.Name = "label_fileAccess";
-            this.label_fileAccess.Size = new System.Drawing.Size(145, 23);
+            this.label_fileAccess.Size = new System.Drawing.Size(395, 23);
             this.label_fileAccess.TabIndex = 2;
-            this.label_fileAccess.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label_fileAccess.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label_currentFileCount
             // 
             this.label_currentFileCount.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.label_currentFileCount.Location = new System.Drawing.Point(6, 39);
             this.label_currentFileCount.Name = "label_currentFileCount";
-            this.label_currentFileCount.Size = new System.Drawing.Size(145, 23);
+            this.label_currentFileCount.Size = new System.Drawing.Size(395, 23);
             this.label_currentFileCount.TabIndex = 1;
-            this.label_currentFileCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label_currentFileCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label_currentSize
             // 
             this.label_currentSize.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.label_currentSize.Location = new System.Drawing.Point(6, 16);
             this.label_currentSize.Name = "label_currentSize";
-            this.label_currentSize.Size = new System.Drawing.Size(145, 23);
+            this.label_currentSize.Size = new System.Drawing.Size(395, 23);
             this.label_currentSize.TabIndex = 0;
             this.label_currentSize.Text = "\r\n\r\n";
-            this.label_currentSize.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox3.Controls.Add(this.label_deletedFcount);
-            this.groupBox3.Controls.Add(this.label_deletedSize);
-            this.groupBox3.Location = new System.Drawing.Point(571, 123);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(155, 94);
-            this.groupBox3.TabIndex = 6;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Deleted";
-            // 
-            // label_deletedFcount
-            // 
-            this.label_deletedFcount.Location = new System.Drawing.Point(6, 39);
-            this.label_deletedFcount.Name = "label_deletedFcount";
-            this.label_deletedFcount.Size = new System.Drawing.Size(88, 23);
-            this.label_deletedFcount.TabIndex = 1;
-            this.label_deletedFcount.Text = "Files: 0";
-            this.label_deletedFcount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // label_deletedSize
-            // 
-            this.label_deletedSize.Location = new System.Drawing.Point(6, 16);
-            this.label_deletedSize.Name = "label_deletedSize";
-            this.label_deletedSize.Size = new System.Drawing.Size(88, 23);
-            this.label_deletedSize.TabIndex = 0;
-            this.label_deletedSize.Text = "Size: 0 B";
-            this.label_deletedSize.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label_currentSize.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // textbox_console
             // 
@@ -245,16 +217,25 @@
             this.textbox_console.Name = "textbox_console";
             this.textbox_console.ReadOnly = true;
             this.textbox_console.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textbox_console.Size = new System.Drawing.Size(714, 349);
+            this.textbox_console.Size = new System.Drawing.Size(407, 181);
             this.textbox_console.TabIndex = 7;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(369, 13);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(32, 23);
+            this.button1.TabIndex = 11;
+            this.button1.Text = "...";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(738, 584);
+            this.ClientSize = new System.Drawing.Size(431, 416);
             this.Controls.Add(this.textbox_console);
-            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.MinimumSize = new System.Drawing.Size(447, 455);
@@ -263,10 +244,11 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
         }
+
+        private System.Windows.Forms.TextBox textBox_cachePath;
 
         private System.Windows.Forms.Button button_cleanup;
 
@@ -276,41 +258,35 @@
 
         private System.Windows.Forms.Label label_fileAccess;
 
-        private System.Windows.Forms.Label label_fileAcces;
-
         private System.Windows.Forms.CheckBox checkBox_showCacheAcces;
 
         private System.Windows.Forms.TextBox textbox_console;
 
-        private System.Windows.Forms.TextBox _console;
+
 
         private System.Windows.Forms.Label label_currentFileCount;
-        private System.Windows.Forms.Label label_deletedSize;
-        private System.Windows.Forms.Label label_deletedFcount;
-        private System.Windows.Forms.GroupBox groupBox3;
+
 
         private System.Windows.Forms.Label label_currentSize;
 
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Label label9;
+
 
         private System.Windows.Forms.Label label7;
 
         private System.Windows.Forms.Label label6;
 
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox textBox3;
+
 
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBox2;
 
-        private System.Windows.Forms.TextBox textBox1;
+
+
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label3;
 
-        private System.Windows.Forms.Label label2;
 
-        private System.Windows.Forms.Label label1;
 
         private System.Windows.Forms.Button button1;
 
