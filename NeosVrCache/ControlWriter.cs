@@ -6,9 +6,9 @@ namespace NeosVrCache
 {
     public class ControlWriter : TextWriter
     {
-        private readonly Control textbox;
+        private readonly TextBox textbox;
 
-        public ControlWriter(Control textbox)
+        public ControlWriter(TextBox textbox)
         {
             this.textbox = textbox;
         }
@@ -18,11 +18,15 @@ namespace NeosVrCache
         public override void Write(char value)
         {
             textbox.Text += value;
+            textbox.SelectionStart = textbox.Text.Length;
+            textbox.ScrollToCaret();
         }
 
         public override void Write(string value)
         {
             textbox.Text += value;
+            textbox.SelectionStart = textbox.Text.Length;
+            textbox.ScrollToCaret();
         }
     }
 }
