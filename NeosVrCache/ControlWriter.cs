@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
@@ -7,27 +6,23 @@ namespace NeosVrCache
 {
     public class ControlWriter : TextWriter
     {
-        private Control textbox;
+        private readonly Control textbox;
+
         public ControlWriter(Control textbox)
         {
             this.textbox = textbox;
         }
 
+        public override Encoding Encoding => Encoding.ASCII;
+
         public override void Write(char value)
         {
             textbox.Text += value;
-            
         }
 
         public override void Write(string value)
         {
             textbox.Text += value;
-            
-        }
-
-        public override Encoding Encoding
-        {
-            get { return Encoding.ASCII; }
         }
     }
 }
