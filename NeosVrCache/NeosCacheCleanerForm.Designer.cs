@@ -32,6 +32,7 @@
             this.button_cleanup = new System.Windows.Forms.Button();
             this.textBox_cachePath = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.checkBox_showCacheAcces = new System.Windows.Forms.CheckBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -45,7 +46,6 @@
             this.label_currentFileCount = new System.Windows.Forms.Label();
             this.label_currentSize = new System.Windows.Forms.Label();
             this.textbox_console = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -64,9 +64,9 @@
             // textBox_cachePath
             // 
             this.textBox_cachePath.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_cachePath.Location = new System.Drawing.Point(163, 15);
+            this.textBox_cachePath.Location = new System.Drawing.Point(157, 15);
             this.textBox_cachePath.Name = "textBox_cachePath";
-            this.textBox_cachePath.Size = new System.Drawing.Size(201, 20);
+            this.textBox_cachePath.Size = new System.Drawing.Size(207, 20);
             this.textBox_cachePath.TabIndex = 3;
             this.textBox_cachePath.Text = "E:\\NeosVR\\Cache";
             this.textBox_cachePath.Leave += new System.EventHandler(this.textBox_Leave);
@@ -92,6 +92,16 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Settings";
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(369, 13);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(32, 23);
+            this.button1.TabIndex = 11;
+            this.button1.Text = "...";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // checkBox_showCacheAcces
             // 
             this.checkBox_showCacheAcces.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -104,7 +114,8 @@
             // 
             // label7
             // 
-            this.label7.Location = new System.Drawing.Point(210, 69);
+            this.label7.Location = new System.Drawing.Point(202, 69);
+            this.label7.Margin = new System.Windows.Forms.Padding(1, 0, 3, 0);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(36, 17);
             this.label7.TabIndex = 10;
@@ -113,7 +124,8 @@
             // 
             // label6
             // 
-            this.label6.Location = new System.Drawing.Point(210, 42);
+            this.label6.Location = new System.Drawing.Point(202, 42);
+            this.label6.Margin = new System.Windows.Forms.Padding(1, 0, 3, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(36, 17);
             this.label6.TabIndex = 9;
@@ -124,14 +136,14 @@
             // 
             this.label5.Location = new System.Drawing.Point(6, 68);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(151, 19);
+            this.label5.Size = new System.Drawing.Size(145, 19);
             this.label5.TabIndex = 8;
             this.label5.Text = "Only Delete Files Older Then:";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // textBox_timeLimit
             // 
-            this.textBox_timeLimit.Location = new System.Drawing.Point(163, 68);
+            this.textBox_timeLimit.Location = new System.Drawing.Point(157, 68);
             this.textBox_timeLimit.Name = "textBox_timeLimit";
             this.textBox_timeLimit.Size = new System.Drawing.Size(41, 20);
             this.textBox_timeLimit.TabIndex = 7;
@@ -140,16 +152,16 @@
             // 
             // label4
             // 
-            this.label4.Location = new System.Drawing.Point(6, 42);
+            this.label4.Location = new System.Drawing.Point(58, 42);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(151, 17);
+            this.label4.Size = new System.Drawing.Size(93, 17);
             this.label4.TabIndex = 6;
             this.label4.Text = "Cache Size Limit:";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // textBox_cacheLimit
             // 
-            this.textBox_cacheLimit.Location = new System.Drawing.Point(163, 39);
+            this.textBox_cacheLimit.Location = new System.Drawing.Point(157, 39);
             this.textBox_cacheLimit.Name = "textBox_cacheLimit";
             this.textBox_cacheLimit.Size = new System.Drawing.Size(41, 20);
             this.textBox_cacheLimit.TabIndex = 5;
@@ -158,7 +170,7 @@
             // 
             // label3
             // 
-            this.label3.Location = new System.Drawing.Point(90, 15);
+            this.label3.Location = new System.Drawing.Point(84, 15);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(67, 17);
             this.label3.TabIndex = 4;
@@ -219,16 +231,6 @@
             this.textbox_console.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.textbox_console.Size = new System.Drawing.Size(407, 181);
             this.textbox_console.TabIndex = 7;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(369, 13);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(32, 23);
-            this.button1.TabIndex = 11;
-            this.button1.Text = "...";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // Form1
             // 

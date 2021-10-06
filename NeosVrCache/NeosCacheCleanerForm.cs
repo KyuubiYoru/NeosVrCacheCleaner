@@ -22,7 +22,7 @@ namespace NeosVrCache
     public partial class Form1 : Form
     {
         private const string WsServiceName = "/neosVrCacheDisplay";
-        private static readonly WebSocketServer WsServer = new(IPAddress.Loopback, 9099, false);
+        private static WebSocketServer WsServer;
 
 
         private static readonly string[] Suf;
@@ -40,18 +40,29 @@ namespace NeosVrCache
         {
             InitializeComponent();
             Console.SetOut(new ControlWriter(textbox_console));
+            ReadConfig();
             CreateFw();
 
 
-            WsServer.AddWebSocketService<NeosVrCacheService>(WsServiceName);
-            WsServer.Start();
+
 
             _timer = new Timer();
             _timer.Interval = 1000;
             _timer.Enabled = true;
             _timer.Tick += (o, args) => TimerOnTick(o, args);
             _timer.Start();
-            ReadConfig();
+
+            try
+            {
+                WsServer = new(IPAddress.Loopback, Config.WsPort, false);
+                WsServer.AddWebSocketService<NeosVrCacheService>(WsServiceName);
+                WsServer.Start();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
         }
 
         private void CreateFw()
@@ -123,6 +134,11 @@ namespace NeosVrCache
         {
             button_cleanup.Enabled = false;
             Console.WriteLine("Started Cleanup...");
+            Task.Run(RunCleanUp);
+        }
+
+        private void RunCleanUp()
+        {
             var sw = Stopwatch.StartNew();
             var size = 0L;
             var deleteSize = 0L;

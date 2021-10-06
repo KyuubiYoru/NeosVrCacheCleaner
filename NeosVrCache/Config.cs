@@ -13,6 +13,7 @@ namespace NeosVrCache
         public static float CacheSizeLimit = 16;
         public static float CacheTimeLimit = 16;
         public static string CachePath;
+        public static int WsPort = 9099;
 
         static Config()
         {
@@ -28,6 +29,7 @@ namespace NeosVrCache
             CacheSizeLimit = float.Parse(data["NeosCacheCleaner"]["CacheSizeLimit"]);
             CacheTimeLimit = float.Parse(data["NeosCacheCleaner"]["CacheTimeLimit"]);
             CachePath = data["NeosCacheCleaner"]["CachePath"];
+            WsPort = int.Parse(data["NeosCacheCleaner"]["WsPort"]);
         }
 
         public static void WriteConfig()
@@ -36,6 +38,7 @@ namespace NeosVrCache
             data["NeosCacheCleaner"]["CacheSizeLimit"] = CacheSizeLimit.ToString();
             data["NeosCacheCleaner"]["CacheTimeLimit"] = CacheTimeLimit.ToString();
             data["NeosCacheCleaner"]["CachePath"] = CachePath;
+            data["NeosCacheCleaner"]["WsPort"] = WsPort.ToString();
             _fileIniDataParser.WriteFile(configFile, data);
         }
     }
