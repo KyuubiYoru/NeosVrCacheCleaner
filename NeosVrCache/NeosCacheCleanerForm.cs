@@ -44,8 +44,6 @@ namespace NeosVrCache
             CreateFw();
 
 
-
-
             _timer = new Timer();
             _timer.Interval = 1000;
             _timer.Enabled = true;
@@ -54,7 +52,7 @@ namespace NeosVrCache
 
             try
             {
-                WsServer = new(IPAddress.Loopback, Config.WsPort, false);
+                WsServer = new WebSocketServer(IPAddress.Loopback, Config.WsPort, false);
                 WsServer.AddWebSocketService<NeosVrCacheService>(WsServiceName);
                 WsServer.Start();
             }
@@ -62,7 +60,6 @@ namespace NeosVrCache
             {
                 Console.WriteLine(e);
             }
-
         }
 
         private void CreateFw()
@@ -134,9 +131,10 @@ namespace NeosVrCache
         {
             button_cleanup.Enabled = false;
             Console.WriteLine("Started Cleanup...");
+            
             Task.Run(RunCleanUp);
         }
-
+        
         private void RunCleanUp()
         {
             var sw = Stopwatch.StartNew();
@@ -145,35 +143,39 @@ namespace NeosVrCache
             var deleteFcount = 0;
             try
             {
-                //var tmp = Environment.GetEnvironmentVariable("TEMP");
-                //var cache = Path.Combine(tmp, @"Solirax\NeosVR\Cache");
-
-
                 var maxSize = Config.CacheSizeLimit * 1024L * 1024L * 1024L;
                 var files = new HashSet<FileSystemInfo>();
-                foreach (var file in new DirectoryInfo(Config.CachePath).GetFiles().OrderByDescending(e => e.LastAccessTime))
-                    if (size < maxSize)
+
+                if (CacheInfo.CacheSize > maxSize)
+                {
+                    foreach (var file in new DirectoryInfo(Config.CachePath).GetFiles().OrderBy(e => e.LastAccessTimeUtc))
                     {
-                        size += file.Length;
-                    }
-                    else if ((DateTime.UtcNow - file.LastWriteTimeUtc).TotalDays >= Config.CacheTimeLimit)
-                    {
-                        deleteSize += file.Length;
-                        files.Add(file);
+                        if ((DateTime.UtcNow - file.LastAccessTimeUtc).TotalDays >= Config.CacheTimeLimit&&CacheInfo.CacheSize-deleteSize > maxSize)
+                        {
+                            deleteSize += file.Length;
+                            files.Add(file);
+                        }
+                        else
+                        {
+                            break;
+                        }
                     }
 
-                foreach (var file in files)
-                    try
+                    foreach (var file in files)
                     {
-                        file.Delete();
-                        deleteFcount++;
-                    }
-                    catch (Exception exception)
-                    {
-                        Console.WriteLine(exception);
+                        try
+                        {
+                            file.Delete();
+                            deleteFcount++;
+                        }
+                        catch (Exception exception)
+                        {
+                            Console.WriteLine(exception);
+                        }
                     }
 
-                CacheInfo.Dirty = true;
+                    CacheInfo.Dirty = true;
+                }
             }
             catch (Exception exception)
             {
