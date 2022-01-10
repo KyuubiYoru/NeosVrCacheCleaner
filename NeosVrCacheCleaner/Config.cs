@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using IniParser;
 using IniParser.Model;
@@ -7,8 +8,8 @@ namespace NeosVrCache
 {
     public static class Config
     {
-        private const string configFile = "config.ini";
-        private static readonly FileIniDataParser _fileIniDataParser = new();
+        private const string ConfigFile = "config.ini";
+        private static readonly FileIniDataParser FileIniDataParser = new();
 
         public static float CacheSizeLimit = 16;
         public static float CacheTimeLimit = 16;
@@ -17,7 +18,7 @@ namespace NeosVrCache
 
         static Config()
         {
-            if (!File.Exists(configFile))
+            if (!File.Exists(ConfigFile))
             {
                 var tmp = Environment.GetEnvironmentVariable("TEMP");
                 CachePath = Path.Combine(tmp, @"Solirax\NeosVR\Cache");
@@ -25,7 +26,7 @@ namespace NeosVrCache
                 return;
             }
 
-            var data = _fileIniDataParser.ReadFile(configFile);
+            var data = FileIniDataParser.ReadFile(ConfigFile);
             CacheSizeLimit = float.Parse(data["NeosCacheCleaner"]["CacheSizeLimit"]);
             CacheTimeLimit = float.Parse(data["NeosCacheCleaner"]["CacheTimeLimit"]);
             CachePath = data["NeosCacheCleaner"]["CachePath"];
@@ -35,11 +36,11 @@ namespace NeosVrCache
         public static void WriteConfig()
         {
             var data = new IniData();
-            data["NeosCacheCleaner"]["CacheSizeLimit"] = CacheSizeLimit.ToString();
-            data["NeosCacheCleaner"]["CacheTimeLimit"] = CacheTimeLimit.ToString();
+            data["NeosCacheCleaner"]["CacheSizeLimit"] = CacheSizeLimit.ToString(CultureInfo.InvariantCulture);
+            data["NeosCacheCleaner"]["CacheTimeLimit"] = CacheTimeLimit.ToString(CultureInfo.InvariantCulture);
             data["NeosCacheCleaner"]["CachePath"] = CachePath;
             data["NeosCacheCleaner"]["WsPort"] = WsPort.ToString();
-            _fileIniDataParser.WriteFile(configFile, data);
+            FileIniDataParser.WriteFile(ConfigFile, data);
         }
     }
 }

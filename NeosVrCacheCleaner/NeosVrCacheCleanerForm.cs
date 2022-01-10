@@ -11,18 +11,10 @@ using WebSocketSharp.Server;
 
 namespace NeosVrCache
 {
-    public static class CacheInfo
-    {
-        public static long FileAccessCount;
-        public static long FileCount;
-        public static long CacheSize;
-        public static bool Dirty = true;
-    }
-
-    public partial class Form1 : Form
+    public partial class NeosVrCacheCleanerForm : Form
     {
         private const string WsServiceName = "/neosVrCacheDisplay";
-        private static WebSocketServer WsServer;
+        private static WebSocketServer _wsServer;
 
 
         private static readonly string[] Suf;
@@ -31,12 +23,12 @@ namespace NeosVrCache
         private FileSystemWatcher _fw;
 
 
-        static Form1()
+        static NeosVrCacheCleanerForm()
         {
             Suf = new[] {" B", " KB", " MB", " GB", " TB", " PB", " EB"};
         }
 
-        public Form1()
+        public NeosVrCacheCleanerForm()
         {
             InitializeComponent();
             Console.SetOut(new ControlWriter(textbox_console));
@@ -52,9 +44,9 @@ namespace NeosVrCache
 
             try
             {
-                WsServer = new WebSocketServer(IPAddress.Loopback, Config.WsPort, false);
-                WsServer.AddWebSocketService<NeosVrCacheService>(WsServiceName);
-                WsServer.Start();
+                _wsServer = new WebSocketServer(IPAddress.Loopback, Config.WsPort, false);
+                _wsServer.AddWebSocketService<NeosVrCacheService>(WsServiceName);
+                _wsServer.Start();
             }
             catch (Exception e)
             {
@@ -70,8 +62,12 @@ namespace NeosVrCache
                 _fw.Dispose();
             }
 
-            _fw = new FileSystemWatcher(Config.CachePath) {InternalBufferSize = 64000, EnableRaisingEvents = true, IncludeSubdirectories = true};
+            _fw = new FileSystemWatcher(Config.CachePath)
+                {InternalBufferSize = 64000, EnableRaisingEvents = true, IncludeSubdirectories = true};
             _fw.Changed += FwOnChanged;
+            var oldestFile = new DirectoryInfo(Config.CachePath).GetFiles().OrderBy(e => e.LastAccessTimeUtc).First()
+                .LastAccessTimeUtc;
+            Console.WriteLine($"Oldest file is {(DateTime.UtcNow - oldestFile).TotalDays.ToString("0.00")} Days old.");
         }
 
         private void ReadConfig()
@@ -118,27 +114,28 @@ namespace NeosVrCache
         {
             var dirInfo = new DirectoryInfo(Config.CachePath);
             var resultFcount = Task.Run(() => dirInfo.GetFiles("*", SearchOption.AllDirectories).Length);
-            var resultCacheSize = Task.Run(() => dirInfo.EnumerateFiles("*", SearchOption.AllDirectories).Sum(file => file.Length));
+            var resultCacheSize = Task.Run(() =>
+                dirInfo.EnumerateFiles("*", SearchOption.AllDirectories).Sum(file => file.Length));
             Task.WaitAll();
             CacheInfo.FileCount = resultFcount.Result;
             CacheInfo.CacheSize = resultCacheSize.Result;
             label_currentSize.Text = "Size: " + BytesToString(CacheInfo.CacheSize);
             label_currentFileCount.Text = "Files: " + CacheInfo.FileCount.ToString("N0", new CultureInfo("EN"));
-            label_fileAccess.Text = "Accessed Files: " + CacheInfo.FileAccessCount.ToString("N0", new CultureInfo("EN"));
+            label_fileAccess.Text =
+                "Accessed Files: " + CacheInfo.FileAccessCount.ToString("N0", new CultureInfo("EN"));
         }
 
         private void buttonCleanUp_Click(object sender, EventArgs e)
         {
             button_cleanup.Enabled = false;
             Console.WriteLine("Started Cleanup...");
-            
+
             Task.Run(RunCleanUp);
         }
-        
+
         private void RunCleanUp()
         {
             var sw = Stopwatch.StartNew();
-            var size = 0L;
             var deleteSize = 0L;
             var deleteFcount = 0;
             try
@@ -148,9 +145,10 @@ namespace NeosVrCache
 
                 if (CacheInfo.CacheSize > maxSize)
                 {
-                    foreach (var file in new DirectoryInfo(Config.CachePath).GetFiles().OrderBy(e => e.LastAccessTimeUtc))
-                    {
-                        if ((DateTime.UtcNow - file.LastAccessTimeUtc).TotalDays >= Config.CacheTimeLimit&&CacheInfo.CacheSize-deleteSize > maxSize)
+                    foreach (var file in new DirectoryInfo(Config.CachePath).GetFiles()
+                        .OrderBy(e => e.LastAccessTimeUtc))
+                        if ((DateTime.UtcNow - file.LastAccessTimeUtc).TotalDays >= Config.CacheTimeLimit &&
+                            CacheInfo.CacheSize - deleteSize > maxSize)
                         {
                             deleteSize += file.Length;
                             files.Add(file);
@@ -159,10 +157,8 @@ namespace NeosVrCache
                         {
                             break;
                         }
-                    }
 
                     foreach (var file in files)
-                    {
                         try
                         {
                             file.Delete();
@@ -172,7 +168,6 @@ namespace NeosVrCache
                         {
                             Console.WriteLine(exception);
                         }
-                    }
 
                     CacheInfo.Dirty = true;
                 }
@@ -184,9 +179,16 @@ namespace NeosVrCache
             finally
             {
                 sw.Stop();
-                button_cleanup.Enabled = true;
-                Console.WriteLine($"Cleanup done in {sw.Elapsed.ToString()}");
-                Console.WriteLine($"Deleted {BytesToString(deleteSize)} {deleteFcount} Files");
+                Invoke((MethodInvoker)
+                    (
+                        () =>
+                        {
+                            button_cleanup.Enabled = true;
+                            Console.WriteLine($"Cleanup done in {sw.Elapsed.ToString()}");
+                            Console.WriteLine($"Deleted {BytesToString(deleteSize)} {deleteFcount} Files");
+                        }
+                    )
+                );
             }
         }
 
@@ -202,7 +204,7 @@ namespace NeosVrCache
 
         public void SendUpdate()
         {
-            WsServer.WebSocketServices[WsServiceName].Sessions.Broadcast(
+            _wsServer.WebSocketServices[WsServiceName].Sessions.Broadcast(
                 $"Cache: {BytesToString(CacheInfo.CacheSize)} || " +
                 $"Files: {CacheInfo.FileCount.ToString("N0", new CultureInfo("EN"))} || " +
                 $"Files Accessed: {CacheInfo.FileAccessCount.ToString("N0", new CultureInfo("EN"))}");
